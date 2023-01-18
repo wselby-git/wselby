@@ -1,0 +1,124 @@
+; This program is an implementation of the Tiny Encryption Algorithm (TEA) in S/360 assembly language.
+; TEA is a simple cipher algorithm designed for applications with limited memory and computing resources.
+ ;
+ ; Program Entry Point
+TEA CSECT
+ SR 15,15
+ LA 15,0(,15)
+ USING TEA,15
+
+; Initialize registers
+ LR 4,1
+ LR 5,2
+ LR 6,3
+
+; Compute K
+ LR 1,4
+ LR 2,5
+ LR 3,6
+ SR 1,1
+ SR 2,2
+ SR 3,3
+ SR 4,4
+ SR 5,5
+ SR 6,6
+ XR 1,2
+ XR 2,3
+ XR 3,4
+ XR 4,5
+ XR 5,6
+ XR 6,1
+
+; Initialize the loop
+ LR 7,0
+ LR 8,64
+
+; Begin the main loop
+LOOP DS 0H
+ LR 9,1
+ LR 10,2
+ LR 11,3
+ LR 12,4
+ LR 13,5
+ LR 14,6
+
+; Compute sum
+ LR 15,7
+ AR 15,8
+ SR 1,1
+ SR 2,2
+ SR 3,3
+ SR 4,4
+ SR 5,5
+ SR 6,6
+ XR 1,2
+ XR 2,3
+ XR 3,4
+ XR 4,5
+ XR 5,6
+ XR 6,1
+ AR 15,1
+ AR 15,2
+ AR 15,3
+ AR 15,4
+ AR 15,5
+ AR 15,6
+
+; Compute delta
+ LR 1,15
+ SR 1,3
+ SR 2,2
+ SR 3,1
+ SR 4,1
+ SR 5,2
+ SR 6,3
+ XR 1,2
+ XR 2,3
+ XR 3,4
+ XR 4,5
+ XR 5,6
+ XR 6,1
+
+; Compute the mix
+ LR 1,9
+ LR 2,10
+ LR 3,11
+ LR 4,12
+ LR 5,13
+ LR 6,14
+ AR 1,15
+ AR 2,15
+ AR 3,15
+ AR 4,15
+ AR 5,15
+ AR 6,15
+ SR 1,1
+ SR 2,2
+ SR 3,3
+ SR 4,4
+ SR 5,5
+ SR 6,6
+ XR 1,2
+ XR 2,3
+ XR 3,4
+ XR 4,5
+ XR 5,6
+ XR 6,1
+
+; Store the resulting ciphertext
+ ST 9,0(0,4)
+ ST 10,4(0,4)
+ ST 11,8(0,4)
+ ST 12,12(0,4)
+ ST 13,16(0,4)
+ ST 14,20(0,4)
+
+; Increment the loop counter
+ LAR 7,1
+ BCT 8,LOOP
+
+; Stop the program
+ XR 15,15
+ BR 14
+TEA 		EQU *
+END TEA
