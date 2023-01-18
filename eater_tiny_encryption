@@ -1,0 +1,18 @@
+	; tiny encryption algorithm in ben eater assembly code
+	
+  ; Program begins here
+  LD A, 0x00		; Load the register A with 0x00
+	XOR A, 0xCE		; XOR A with the key 0xCE
+	LD B, 0x00		; Load the register B with 0x00
+	LD C, 0x01		; Load the register C with 0x01
+	
+	; Loop to encrypt the bytes of the data
+Loop1:				; Label for the loop
+	ADD A, B		; Add A and B
+	XOR A, C		; XOR A with C
+	RLCA			; Rotate the bits of A left
+	XOR A, 0xAB		; XOR A with the key 0xAB
+	RL B			; Rotate the bits of B right
+	RL C			; Rotate the bits of C right
+	CP 0xFF			; Compare the data byte with 0xFF
+	JR NZ, Loop1	; If the data byte is not 0xFF,
