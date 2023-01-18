@@ -1,18 +1,15 @@
-	; tiny encryption algorithm in ben eater assembly code
-	
-  ; Program begins here
-  LD A, 0x00		; Load the register A with 0x00
-	XOR A, 0xCE		; XOR A with the key 0xCE
-	LD B, 0x00		; Load the register B with 0x00
-	LD C, 0x01		; Load the register C with 0x01
-	
-	; Loop to encrypt the bytes of the data
-Loop1:				; Label for the loop
-	ADD A, B		; Add A and B
-	XOR A, C		; XOR A with C
-	RLCA			; Rotate the bits of A left
-	XOR A, 0xAB		; XOR A with the key 0xAB
-	RL B			; Rotate the bits of B right
-	RL C			; Rotate the bits of C right
-	CP 0xFF			; Compare the data byte with 0xFF
-	JR NZ, Loop1	; If the data byte is not 0xFF,
+start:
+	MOV A,R1					; Move the first number into A.
+	MOV B,R2					; Move the second number into B.
+	XOR A,B						; XOR A and B and store the result in A.
+	ADD A,R3					; Add the third number to A.
+	MOV B,A						; Move the result back into B.
+	SHL A,1						; Shift A to the left 1 bit.
+	MOV C,A						; Move the result into C.
+	SHL B,1						; Shift B to the left 1 bit.
+	XOR B,R4					; XOR B and the fourth number and store in B.
+	XOR C,B						; XOR C and B and store the result in C.
+	MOV R1,A					; Move A into the first number.
+	MOV R2,B					; Move B into the second number.
+	MOV R3,C					; Move C into the third number.
+	HALT						; Halt the program.
