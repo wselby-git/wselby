@@ -1,0 +1,45 @@
+TITLE Tiny Encryption Algorithm in z/Arch Assembly
+
+; This program implements the Tiny Encryption Algorithm (TEA) in z/Arch Assembly Language
+; TEA is a symmetric encryption algorithm, meaning the same key is used for encryption and decryption
+
+; REGISTERS USED
+
+R1 = Pointer to input data
+R2 = Pointer to output data
+R3 = Pointer to key
+R4 = Pointer to round count
+R5 = Pointer to delta constant
+R6 = Counter
+R7 = Temporary register
+R8 = Temporary register
+
+; CONSTANTS
+
+DELTA = 0x9E3779B9       ; K Constants used in TEA algorithm
+ROUND_COUNT = 32         ; Number of rounds used in TEA algorithm
+
+; PROGRAM
+
+TEA:
+    STM R6, R7, R8, SAVE_REGS  ; Save all registers that will be used
+    MVC ROUND_COUNT(R4), R6    ; Load round count into R6
+    MVC DELTA(R5), R7          ; Load delta constant into R7
+
+Loop:
+    MVCL R3, R8                ; Load key into R8
+    XC R1, R2                  ; XOR input data with output data
+    ST R8, R7                  ; Store key in R7
+    SRL R7, 5                  ; Shift right 5 bits
+    ARL R7, R8                 ; Add key to R8
+    ARL R7, R1                 ; Add key to input data
+    ARL R7, R2                 ; Add key to output data
+    BCTR R6, Loop              ; Decrement counter, loop if not 0
+
+Done:
+    MVC R2(16), R1             ; Copy input data to output data
+    LM R6, R7, R8, SAVE_REGS   ; Restore all registers used
+    BR R14                      ; Return
+
+SAVE_REGS: DS 0F              ; Area for storing registers
+END TEA
