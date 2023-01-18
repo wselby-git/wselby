@@ -1,0 +1,20 @@
+;Tiny Encryption Algorithm
+;Univac Assembly Language
+;Created by [Name]
+
+start:
+	load	reg1, key	;load key into reg1
+	load	reg2, x		;load x into reg2
+	xor		reg2, reg1	;xor reg2 and reg1
+	add		reg2, reg1	;add reg2 and reg1
+	store	reg2, y		;store result in y
+	load	reg3, y		;load y into reg3
+	xor		reg3, reg1	;xor reg3 and reg1
+	add		reg3, reg1	;add reg3 and reg1
+	store	reg3, z		;store result in z
+	stop
+
+key:		word	0xabcd	;key value
+x:			word	0x1234	;input value
+y:			word	0		;output value
+z:			word	0		;output value
