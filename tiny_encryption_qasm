@@ -1,0 +1,104 @@
+//This program will use the Tiny Encryption Algorithm (TEA) to encrypt a given two-word message
+OPENQASM 2.0;
+
+// Declare the registers
+qreg q[64];
+
+// Declare the constants
+// (These can be replaced with user-defined constants)
+double c0=0.5;
+double c1=0.0;
+double c2=1.5;
+double c3=2.0;
+
+//Initialize the message into the registers
+// (This can be replaced with user-defined message)
+x q[0];
+x q[1];
+x q[2];
+x q[3];
+x q[4];
+x q[5];
+x q[6];
+x q[7];
+
+// Begin TEA encryption
+cx q[0], q[4];  // word1[0] XOR word2[0] 
+cx q[1], q[5];  // word1[1] XOR word2[1] 
+cx q[2], q[6];  // word1[2] XOR word2[2] 
+cx q[3], q[7];  // word1[3] XOR word2[3] 
+
+// Round 1
+rx(c0) q[0];
+rx(c1) q[1];
+rx(c2) q[2];
+rx(c3) q[3];
+
+// Round 2
+rx(c0) q[1];
+rx(c1) q[2];
+rx(c2) q[3];
+rx(c3) q[0];
+
+// Round 3
+rx(c0) q[2];
+rx(c1) q[3];
+rx(c2) q[0];
+rx(c3) q[1];
+
+// Round 4
+rx(c0) q[3];
+rx(c1) q[0];
+rx(c2) q[1];
+rx(c3) q[2];
+
+// Round 5
+rx(c0) q[4];
+rx(c1) q[5];
+rx(c2) q[6];
+rx(c3) q[7];
+
+// Round 6
+rx(c0) q[5];
+rx(c1) q[6];
+rx(c2) q[7];
+rx(c3) q[4];
+
+// Round 7
+rx(c0) q[6];
+rx(c1) q[7];
+rx(c2) q[4];
+rx(c3) q[5];
+
+// Round 8
+rx(c0) q[7];
+rx(c1) q[4];
+rx(c2) q[5];
+rx(c3) q[6];
+
+// Measure the registers
+measure q[0] -> c[0];
+measure q[1] -> c[1];
+measure q[2] -> c[2];
+measure q[3] -> c[3];
+measure q[4] -> c[4];
+measure q[5] -> c[5];
+measure q[6] -> c[6];
+measure q[7] -> c[7];
+
+// End TEA encryption
+
+// Print the encrypted message
+creg c[8];
+barrier q[0],q[1],q[2],q[3],q[4],q[5],q[6],q[7];
+
+//Print the encrypted message
+print("Encrypted Message:");
+print(c[0]);
+print(c[1]);
+print(c[2]);
+print(c[3]);
+print(c[4]);
+print(c[5]);
+print(c[6]);
+print(c[7]);
