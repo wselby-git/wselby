@@ -1,0 +1,30 @@
+; AES encryption of a file using Intel's AES instructions
+
+section .text
+	global _start
+
+_start:
+	; Load the key into XMM0
+	movdqu	xmm0, [key]
+
+	; Load the plaintext into XMM1
+	movdqu	xmm1, [plaintext]
+
+	; Perform the encryption
+	aesenc	xmm1, xmm0
+
+	; Store the encrypted data
+	movdqu	[ciphertext], xmm1
+
+	; Exit the program
+	mov	eax, 1
+	mov	ebx, 0
+	int	0x80
+
+section .data
+	key:			; AES Key
+		db	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f
+	plaintext:		; Plaintext
+		db	0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff
+	ciphertext:		; Ciphertext
+		resb	16
