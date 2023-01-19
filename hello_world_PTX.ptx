@@ -1,0 +1,19 @@
+.version 4.0
+.target sm_20
+.address_size 64
+
+.global .main
+
+.func (.param .b32 func_retval) .main
+{
+	mov.u32 	%func_retval, 0;
+	ld.param.u64 	%rd1, [__cuda_fp64_hello_world];
+	mov.u64 	%rd2, 0;
+	ld.global.u64 	%rd3, [%rd1+%rd2];
+	mov.u32 	%func_retval, %rd3;
+	ret;
+}
+
+.section __cuda_fp64_hello_world,"a",@progbits
+.align 8
+.quad 0x68656c6c6f20776f726c64
