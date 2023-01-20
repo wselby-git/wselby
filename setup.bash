@@ -1,23 +1,27 @@
 // Author: William Selby
 // Linux initial setup script
 
+
 #!/bin/bash
 
-#update and upgrade packages
-sudo apt-get update
-sudo apt-get upgrade
+# Update and upgrade the system
+sudo apt-get update && sudo apt-get upgrade
 
-#install packages
-sudo apt-get install memtool mesa-utils nmap tor lynx wireshark
+# Install software
+sudo apt-get install gcc python python-pip nmap netcat wireshark memtool tor lynx firefox
 
-#enable SELinux
+# Enable SELinux
 sudo setenforce 1
 
-#encrypt hard drive
-sudo cryptsetup luksFormat /dev/sda1
-sudo cryptsetup luksOpen /dev/sda1 my_luks
-
-#enable firewall
+# Enable the firewall
 sudo ufw enable
 
-echo "Packages updated, installed, and configured successfully!"
+# Encrypt the hard drive
+sudo cryptsetup luksFormat /dev/sda1
+
+# Create a backup of the hard drive and encrypt it
+sudo dd if=/dev/sda1 of=/backup/sda1.img
+sudo cryptsetup luksFormat /backup/sda1.img
+
+# Set up the crontab to monitor uptime, disk space and users one a day at 4 am
+echo "0 4 * * * /usr/bin/uptime; /bin/df -h; /usr/bin/who" | sudo crontab -
