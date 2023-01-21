@@ -8,7 +8,7 @@
 sudo apt-get update && sudo apt-get upgrade
 
 # Install software
-sudo apt-get install gcc python python-pip nmap netcat wireshark memtool tor lynx firefox
+sudo apt-get install gcc python python-pip nmap netcat wireshark memtool tor lynx firefox build-essential cmake libboost-all-dev git
 
 # Enable SELinux
 sudo setenforce 1
